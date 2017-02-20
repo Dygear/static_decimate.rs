@@ -1,6 +1,6 @@
 extern crate num;
 
-#[macro_use]
+#[cfg_attr(test, macro_use)]
 extern crate static_fir;
 
 use static_fir::{FIRCoefs, FIRFilter};
