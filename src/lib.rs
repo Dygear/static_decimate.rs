@@ -5,20 +5,16 @@ extern crate static_fir;
 
 use static_fir::{FirCoefs, FirFilter};
 
-pub trait DecimationFactor {
-    fn factor() -> u32;
-}
-
-pub struct Decimator<D: DecimationFactor, C: FirCoefs> {
-    factor: std::marker::PhantomData<D>,
+pub struct Decimator<C: FirCoefs> {
+    factor: u32,
     filter: FirFilter<C>,
     idx: u32,
 }
 
-impl<D: DecimationFactor, C: FirCoefs> Decimator<D, C> {
-    pub fn new() -> Decimator<D, C> {
+impl<C: FirCoefs> Decimator<C> {
+    pub fn new(downsampling: u32) -> Decimator<C> {
         Decimator {
-            factor: std::marker::PhantomData,
+            factor: downsampling,
             filter: FirFilter::new(),
             idx: 0,
         }
@@ -28,7 +24,7 @@ impl<D: DecimationFactor, C: FirCoefs> Decimator<D, C> {
         let out = self.filter.feed(sample);
 
         self.idx += 1;
-        self.idx %= D::factor();
+        self.idx %= self.factor;
 
         if self.idx != 0 {
             None
@@ -67,15 +63,9 @@ mod test {
         1.0, 0.0, 2.0, 3.0, 0.0, 1.0,
     ]);
 
-    pub struct TestDecim;
-
-    impl DecimationFactor for TestDecim {
-        fn factor() -> u32 { 4 }
-    }
-
     #[test]
     fn test_decim() {
-        let mut d = Decimator::<TestDecim, TestFIR>::new();
+        let mut d = Decimator::<TestFIR>::new(4);
 
         assert_eq!(d.feed(1.0), None);
         assert_eq!(d.feed(1.0), None);
@@ -89,7 +79,7 @@ mod test {
 
     #[test]
     fn test_in_place() {
-        let mut d = Decimator::<TestDecim, TestFIR>::new();
+        let mut d = Decimator::<TestFIR>::new(4);
         let mut samples = [1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 2.0, 2.0];
 
         d.decim_in_place(&mut samples[..]);
