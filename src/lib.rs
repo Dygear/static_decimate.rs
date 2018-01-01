@@ -3,23 +3,23 @@ extern crate num;
 #[cfg_attr(test, macro_use)]
 extern crate static_fir;
 
-use static_fir::{FIRCoefs, FIRFilter};
+use static_fir::{FirCoefs, FirFilter};
 
 pub trait DecimationFactor {
     fn factor() -> u32;
 }
 
-pub struct Decimator<D: DecimationFactor, C: FIRCoefs> {
+pub struct Decimator<D: DecimationFactor, C: FirCoefs> {
     factor: std::marker::PhantomData<D>,
-    filter: FIRFilter<C>,
+    filter: FirFilter<C>,
     idx: u32,
 }
 
-impl<D: DecimationFactor, C: FIRCoefs> Decimator<D, C> {
+impl<D: DecimationFactor, C: FirCoefs> Decimator<D, C> {
     pub fn new() -> Decimator<D, C> {
         Decimator {
             factor: std::marker::PhantomData,
-            filter: FIRFilter::new(),
+            filter: FirFilter::new(),
             idx: 0,
         }
     }
