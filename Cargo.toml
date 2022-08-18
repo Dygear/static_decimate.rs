@@ -1,8 +1,8 @@
 [package]
 name = "static_decimate"
-version = "1.0.0"
-authors = ["Mick Koch <mick@kochm.co>"]
+version = "1.0.1"
+authors = ["Mick Koch <mick@kochm.co>", "Mark Tomlin <Dygear@gmail.com>"]
 
 [dependencies]
-static_fir = "0.2.0"
+static_fir = {version = "1.0.1",  git = "https://github.com/Dygear/static_fir.rs" }
 num = "^0.1.35"

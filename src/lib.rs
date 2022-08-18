@@ -3,19 +3,19 @@ extern crate num;
 #[cfg_attr(test, macro_use)]
 extern crate static_fir;
 
-use static_fir::{FirCoefs, FirFilter};
+use static_fir::{FIRCoefs, FIRFilter};
 
-pub struct Decimator<C: FirCoefs> {
+pub struct Decimator<C: FIRCoefs> {
     factor: u32,
-    filter: FirFilter<C>,
+    filter: FIRFilter<C>,
     idx: u32,
 }
 
-impl<C: FirCoefs> Decimator<C> {
+impl<C: FIRCoefs> Decimator<C> {
     pub fn new(downsampling: u32) -> Decimator<C> {
         Decimator {
             factor: downsampling,
-            filter: FirFilter::new(),
+            filter: FIRFilter::new(),
             idx: 0,
         }
     }
